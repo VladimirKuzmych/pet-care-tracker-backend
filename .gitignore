@@ -54,6 +54,9 @@ nbdist/
 # Spring Boot
 spring-boot-devtools.properties
 
+# Environment variables
+.env
+
 # Database
 *.db
 *.sqlite
