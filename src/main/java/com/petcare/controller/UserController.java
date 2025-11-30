@@ -23,14 +23,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    // GET all users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    // GET user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
@@ -38,7 +36,6 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET user by email
     @GetMapping("/email/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email)
@@ -46,7 +43,6 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // CREATE new user
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
         try {
@@ -59,7 +55,6 @@ public class UserController {
         }
     }
 
-    // UPDATE user
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
         try {
@@ -72,7 +67,6 @@ public class UserController {
         }
     }
 
-    // DELETE user
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
@@ -87,7 +81,6 @@ public class UserController {
         }
     }
 
-    // CHECK if user exists
     @GetMapping("/{id}/exists")
     public ResponseEntity<Map<String, Boolean>> userExists(@PathVariable Long id) {
         Map<String, Boolean> response = new HashMap<>();

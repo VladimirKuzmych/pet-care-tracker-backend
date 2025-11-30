@@ -41,7 +41,6 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-        // Check if email is being changed and if it already exists
         if (!user.getEmail().equals(userDetails.getEmail()) && 
             userRepository.existsByEmail(userDetails.getEmail())) {
             throw new RuntimeException("Email already exists: " + userDetails.getEmail());

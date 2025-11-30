@@ -1,0 +1,2 @@
+ALTER TABLE user_account
+ADD COLUMN password VARCHAR(255) NOT NULL;
