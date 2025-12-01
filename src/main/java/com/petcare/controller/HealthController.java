@@ -9,17 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-public class TestController {
-
-    @GetMapping("/test")
-    public Map<String, Object> test() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", "success");
-        response.put("message", "Pet Care Tracker API is running!");
-        response.put("timestamp", System.currentTimeMillis());
-        return response;
-    }
-
+public class HealthController {
     @GetMapping("/health")
     public Map<String, String> health() {
         Map<String, String> response = new HashMap<>();
