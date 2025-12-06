@@ -41,7 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 email = jwtUtil.extractEmail(jwt);
             } catch (Exception e) {
-                // Token extraction failed
+                handleInvalidToken(response);
+                return;
             }
         }
 
@@ -57,9 +58,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } else {
+                handleInvalidToken(response);
+                return;
             }
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void handleInvalidToken(HttpServletResponse response) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\":\"Invalid or expired token\"}");
     }
 }

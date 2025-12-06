@@ -1,5 +1,6 @@
 package com.petcare.controller;
 
+import com.petcare.dto.ChangePasswordRequest;
 import com.petcare.model.User;
 import com.petcare.service.UserService;
 import jakarta.validation.Valid;
@@ -67,6 +68,18 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> patchUser(@PathVariable Long id, @RequestBody User userDetails) {
+        try {
+            User updatedUser = userService.patchUser(id, userDetails);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
@@ -86,5 +99,19 @@ public class UserController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("exists", userService.userExists(id));
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<?> changePassword(@PathVariable Long id, @Valid @RequestBody ChangePasswordRequest request) {
+        try {
+            userService.changePassword(id, request.getCurrentPassword(), request.getNewPassword());
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Password changed successfully");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 }
