@@ -1,0 +1,15 @@
+[providers]
+java = "21"
+
+[phases.setup]
+nixPkgs = ["jdk21", "maven"]
+nixOverlays = ["https://github.com/railwayapp/nix-packages/archive/main.tar.gz"]
+
+[phases.build]
+cmds = ["mvn clean install -DskipTests -Pproduction"]
+
+[phases.start]
+cmd = "java -jar target/pet-care-tracker-backend-0.0.1-SNAPSHOT.jar"
+
+[variables]
+NIXPACKS_NO_MUSL = "1"
