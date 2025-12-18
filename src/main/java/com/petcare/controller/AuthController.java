@@ -3,6 +3,7 @@ package com.petcare.controller;
 import com.petcare.dto.LoginRequest;
 import com.petcare.dto.LoginResponse;
 import com.petcare.dto.RegisterRequest;
+import com.petcare.dto.ResetPasswordRequest;
 import com.petcare.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,20 @@ public class AuthController {
         try {
             LoginResponse response = authService.register(registerRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        try {
+            authService.resetPassword(resetPasswordRequest.getEmail());
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Password reset email sent successfully");
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());

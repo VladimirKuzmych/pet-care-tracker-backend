@@ -20,16 +20,19 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
     @Autowired
     public AuthService(UserRepository userRepository, 
                       PasswordEncoder passwordEncoder,
                       JwtUtil jwtUtil,
-                      AuthenticationManager authenticationManager) {
+                      AuthenticationManager authenticationManager,
+                      EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
@@ -81,5 +84,38 @@ public class AuthService {
             user.getFirstName(),
             user.getLastName()
         );
+    }
+
+    public void resetPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        String newPassword = generateRandomPassword();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        emailService.sendPasswordResetEmail(user.getEmail(), newPassword);
+    }
+
+    private String generateRandomPassword() {
+        String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lower = "abcdefghijklmnopqrstuvwxyz";
+        String digits = "0123456789";
+        String special = "!@#$%^&*";
+        String all = upper + lower + digits + special;
+
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(upper.charAt(random.nextInt(upper.length())));
+        sb.append(lower.charAt(random.nextInt(lower.length())));
+        sb.append(digits.charAt(random.nextInt(digits.length())));
+        sb.append(special.charAt(random.nextInt(special.length())));
+
+        for (int i = 0; i < 8; i++) {
+            sb.append(all.charAt(random.nextInt(all.length())));
+        }
+
+        return sb.toString();
     }
 }
