@@ -30,6 +30,9 @@ public class Pet {
     @Column
     private String breed;
 
+    @Column(name = "daily_portion", nullable = false)
+    private Integer dailyPortion;
+
     @ManyToMany
     @JoinTable(
         name = "user_pet",
@@ -95,6 +98,14 @@ public class Pet {
 
     public void setBreed(String breed) {
         this.breed = breed;
+    }
+
+    public Integer getDailyPortion() {
+        return dailyPortion;
+    }
+
+    public void setDailyPortion(Integer dailyPortion) {
+        this.dailyPortion = dailyPortion;
     }
 
     public Set<User> getUsers() {

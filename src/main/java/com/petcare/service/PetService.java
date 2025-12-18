@@ -49,6 +49,7 @@ public class PetService {
                     pet.setName(petDetails.getName());
                     pet.setKind(petDetails.getKind());
                     pet.setBreed(petDetails.getBreed());
+                    pet.setDailyPortion(petDetails.getDailyPortion());
                     return petRepository.save(pet);
                 });
     }
