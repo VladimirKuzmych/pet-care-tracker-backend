@@ -104,6 +104,7 @@ class PetSharingServiceTest {
         shareToken.setId(1L);
 
         when(shareTokenRepository.findByToken("test-token-123")).thenReturn(Optional.of(shareToken));
+        when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
         when(userRepository.findById(2L)).thenReturn(Optional.of(recipient));
         when(petRepository.save(any(Pet.class))).thenReturn(pet);
 
@@ -148,6 +149,7 @@ class PetSharingServiceTest {
         shareToken.setId(1L);
 
         when(shareTokenRepository.findByToken("test-token")).thenReturn(Optional.of(shareToken));
+        when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
         when(userRepository.findById(2L)).thenReturn(Optional.of(recipient));
 
         AcceptShareLinkResponse response = petSharingService.acceptShareLink("test-token", 2L);

@@ -80,7 +80,8 @@ public class PetSharingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Pet pet = shareToken.getPet();
+        Pet pet = petRepository.findById(shareToken.getPet().getId())
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         if (pet.getUsers().contains(user)) {
             return new AcceptShareLinkResponse(false, "You already have access to this pet", pet);
