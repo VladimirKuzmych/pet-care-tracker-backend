@@ -52,6 +52,16 @@ public class FeedingController {
         }
     }
 
+    @GetMapping("/today")
+    public ResponseEntity<List<FeedingResponse>> getTodayFeedings(@PathVariable Long petId) {
+        try {
+            List<FeedingResponse> feedings = feedingService.getTodayFeedings(petId);
+            return ResponseEntity.ok(feedings);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{feedingId}")
     public ResponseEntity<FeedingResponse> getFeeding(@PathVariable Long petId, @PathVariable Long feedingId) {
         return feedingService.getFeedingById(feedingId)
